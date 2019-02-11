@@ -1,8 +1,8 @@
 class MoviesController < ApplicationController
 
-  def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
-  end
+#  def movie_params
+#    params.require(:movie).permit(:title, :rating, :description, :release_date)
+#  end
 
   def show
     id = params[:id] # retrieve movie ID from URI route
