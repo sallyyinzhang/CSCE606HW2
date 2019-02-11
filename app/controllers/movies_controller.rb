@@ -1,8 +1,8 @@
 class MoviesController < ApplicationController
 
-#  def movie_params
-#    params.require(:movie).permit(:title, :rating, :description, :release_date)
-#  end
+  def movie_params
+    params.require(:movie).permit(:title, :rating, :description, :release_date)
+  end
 
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -11,28 +11,51 @@ class MoviesController < ApplicationController
   end
 
   def index
-    sort = params[:sort] || session[:sort]
-    case sort
-    when 'title'
-      ordering,@title_header = {:order => :title}, 'hilite'
-    when 'release_date'
-      ordering,@date_header = {:order => :release_date}, 'hilite'
+    @movies = Movie.all
+    
+    if params[:title_click]=="yes"
+      session[:title_class]="hilite"
+      session[:release_date_class]=""
+    elsif params[:release_date_click]=="yes"
+      session[:title_class]=""
+      session[:release_date_class]="hilite"
     end
-    @all_ratings = Movie.all_ratings
-    @selected_ratings = params[:ratings] || session[:ratings] || {}
-
-    if params[:sort] != session[:sort]
-      session[:sort] = sort
-      redirect_to :sort => sort, :ratings => @selected_ratings and return
+ 
+    if session[:title_class]=="hilite"
+     @movies = @movies.all.order(:title)
+    elsif session[:release_date_class]=="hilite"
+     @movies = @movies.all.order(:release_date)
     end
-
-    if params[:ratings] != session[:ratings] and @selected_ratings != {}
-      session[:sort] = sort
-      session[:ratings] = @selected_ratings
-      redirect_to :sort => sort, :ratings => @selected_ratings and return
+    
+    @all_ratings = Movie.distinct.pluck(:rating)
+    
+    if params[:ratings]!=nil
+     session[:checked]=params[:ratings]
     end
-    @movies = Movie.find_all_by_rating(@selected_ratings.keys, ordering)
+    
+    if session[:checked]==nil
+      session[:checked]=Hash.new()
+      @all_ratings.each do |rating|
+       session[:checked][rating]=1
+      end
+    end
+    
+    @movies = @movies.where({rating: session[:checked].keys})
+    
+    if session[:title_class]=="hilite" and params[:title_click]==nil 
+      params[:title_click]="yes"
+      redirect_to movies_path(params)
+    elsif session[:release_date_class]=="hilite" and params[:release_date_click]==nil
+      params[:release_date_click]="yes"
+      redirect_to movies_path(params)
+    elsif params[:ratings]==nil and session[:checked]!=nil
+      params[:ratings]=session[:checked]
+      #flash.keep
+      redirect_to movies_path(params)
+    end
+    
   end
+  
 
   def new
     # default: render 'new' template
