@@ -3,10 +3,6 @@ class MoviesController < ApplicationController
 #  def movie_params
 #    params.require(:movie).permit(:title, :rating, :description, :release_date)
 #  end
-  def initialize
-        @all_ratings = Movie.all_ratings
-        super
-  end
 
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -15,39 +11,27 @@ class MoviesController < ApplicationController
   end
 
   def index
-        redirect = false
+    sort = params[:sort] || session[:sort]
+    case sort
+    when 'title'
+      ordering,@title_header = {:order => :title}, 'hilite'
+    when 'release_date'
+      ordering,@date_header = {:order => :release_date}, 'hilite'
+    end
+    @all_ratings = Movie.all_ratings
+    @selected_ratings = params[:ratings] || session[:ratings] || {}
 
-        if params[:sort]
-            @sorting = params[:sort]
-        elsif session[:sort]
-            @sorting = session[:sort]
-            redirect = true
-        end
+    if params[:sort] != session[:sort]
+      session[:sort] = sort
+      redirect_to :sort => sort, :ratings => @selected_ratings and return
+    end
 
-        if params[:ratings]
-            @ratings = params[:ratings]
-        elsif session[:ratings]
-            @ratings = session[:ratings]
-            redirect = true
-        else
-            @all_ratings.each do |rat|
-                (@ratings ||= { })[rat] = 1
-            end
-            redirect = true
-        end
-
-        if redirect
-            redirect_to movies_path(:sort => @sorting, :ratings => @ratings)
-        end
-
-        Movie.find(:all, :order => @sorting ? @sorting : :id).each do |mv|
-            if @ratings.keys.include? mv[:rating]
-                (@movies ||= [ ]) << mv
-            end
-        end
-
-        session[:sort]    = @sorting
-        session[:ratings] = @ratings
+    if params[:ratings] != session[:ratings] and @selected_ratings != {}
+      session[:sort] = sort
+      session[:ratings] = @selected_ratings
+      redirect_to :sort => sort, :ratings => @selected_ratings and return
+    end
+    @movies = Movie.find_all_by_rating(@selected_ratings.keys, ordering)
   end
 
   def new
