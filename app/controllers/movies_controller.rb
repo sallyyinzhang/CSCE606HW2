@@ -11,19 +11,17 @@ class MoviesController < ApplicationController
   end
 
 
-
   def index
     @movies = Movie.all
-    
-    if params[:title_click]=="yes"
-      session[:title_class]="hilite"
+    if params[:title_click]=='yes'
+      session[:title]='hilite'
       session[:release_date_class]=""
     elsif params[:release_date_click]=="yes"
-      session[:title_class]=""
+      session[:title]=""
       session[:release_date_class]="hilite"
     end
  
-    if session[:title_class]=="hilite"
+    if session[:title]=="hilite"
      @movies = @movies.all.order(:title)
     elsif session[:release_date_class]=="hilite"
      @movies = @movies.all.order(:release_date)
@@ -44,7 +42,7 @@ class MoviesController < ApplicationController
     
     @movies = @movies.where({rating: session[:checked].keys})
     
-    if session[:title_class]=="hilite" and params[:title_click]==nil 
+    if session[:title]=="hilite" and params[:title_click]==nil 
       params[:title_click]="yes"
       redirect_to movies_path(params)
     elsif session[:release_date_class]=="hilite" and params[:release_date_click]==nil
