@@ -12,8 +12,8 @@ class MoviesController < ApplicationController
 
 
   def index
+    #part 1
     @movies = Movie.all
-    @all_ratings = Movie.distinct.pluck(:rating)
     
     if params[:choose_title]=='yes'
       session[:title]='hilite'
@@ -27,31 +27,6 @@ class MoviesController < ApplicationController
      @movies = @movies.all.order(:title)
     elsif session[:release_date]=="hilite"
      @movies = @movies.all.order(:release_date)
-    end
-    
-    if params[:ratings]!=nil
-     session[:checked]=params[:ratings]
-    end
-    
-    if session[:checked]==nil
-      session[:checked]=Hash.new()
-      @all_ratings.each do |rating|
-       session[:checked][rating]=1
-      end
-    end
-    
-    @movies = @movies.where({rating: session[:checked].keys})
-    
-    if session[:title]=="hilite" and params[:choose_title]==nil 
-      params[:choose_title]="yes"
-      redirect_to movies_path(params)
-    elsif session[:release_date]=="hilite" and params[:choose_release_date]==nil
-      params[:choose_release_date]="yes"
-      redirect_to movies_path(params)
-    elsif params[:ratings]==nil and session[:checked]!=nil
-      params[:ratings]=session[:checked]
-      #flash.keep
-      redirect_to movies_path(params)
     end
     
   end
