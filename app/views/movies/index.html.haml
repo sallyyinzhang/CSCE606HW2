@@ -4,7 +4,7 @@
 %table#movies
   %thead
     %tr
-      %th{:id => "title_header",:class =>session[:title]}=link_to 'Movie title', movies_path(:title_click =>"yes")
+      %th{:id => "title_header",:class =>session[:title]}=link_to 'Movie title', movies_path(:choose_title =>"yes")
       %th Rating
       %th{:id => "release_date_header",:class => session[:release_date]}=link_to 'Release Date', movies_path(:release_date_click =>"yes")
       %th More Info

@@ -15,7 +15,7 @@ class MoviesController < ApplicationController
     @movies = Movie.all
     @all_ratings = Movie.distinct.pluck(:rating)
     
-    if params[:title_click]=='yes'
+    if params[:choose_title]=='yes'
       session[:title]='hilite'
       session[:release_date]=""
     elsif params[:release_date_click]=="yes"
@@ -42,8 +42,8 @@ class MoviesController < ApplicationController
     
     @movies = @movies.where({rating: session[:checked].keys})
     
-    if session[:title]=="hilite" and params[:title_click]==nil 
-      params[:title_click]="yes"
+    if session[:title]=="hilite" and params[:choose_title]==nil 
+      params[:choose_title]="yes"
       redirect_to movies_path(params)
     elsif session[:release_date]=="hilite" and params[:release_date_click]==nil
       params[:release_date_click]="yes"
