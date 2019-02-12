@@ -29,7 +29,7 @@ class MoviesController < ApplicationController
      @movies = @movies.all.order(:release_date)
     end
     
-        @all_ratings = Movie.distinct.pluck(:rating)
+   @all_ratings = Movie.distinct.pluck(:rating)
     
     if params[:ratings]!=nil
      session[:checked]=params[:ratings]
