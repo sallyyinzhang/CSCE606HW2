@@ -29,6 +29,8 @@ class MoviesController < ApplicationController
      @movies = @movies.all.order(:release_date)
     end
     
+    
+    
   end
   
 
