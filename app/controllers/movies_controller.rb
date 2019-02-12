@@ -13,6 +13,8 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all
+    @all_ratings = Movie.distinct.pluck(:rating)
+    
     if params[:title_click]=='yes'
       session[:title]='hilite'
       session[:release_date]=""
@@ -26,8 +28,6 @@ class MoviesController < ApplicationController
     elsif session[:release_date]=="hilite"
      @movies = @movies.all.order(:release_date)
     end
-    
-    @all_ratings = Movie.distinct.pluck(:rating)
     
     if params[:ratings]!=nil
      session[:checked]=params[:ratings]
