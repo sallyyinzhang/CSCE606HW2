@@ -21,6 +21,9 @@ class MoviesController < ApplicationController
     elsif params[:choose_release_date]=="yes"
       session[:title]=""
       session[:release_date]="hilite"
+    else
+      session[:title]=""
+      session[:release_date]=""
     end
  
     if session[:title]=="hilite"
