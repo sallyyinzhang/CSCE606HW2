@@ -15,15 +15,15 @@ class MoviesController < ApplicationController
     @movies = Movie.all
     if params[:title_click]=='yes'
       session[:title]='hilite'
-      session[:release_date_class]=""
+      session[:release_date]=""
     elsif params[:release_date_click]=="yes"
       session[:title]=""
-      session[:release_date_class]="hilite"
+      session[:release_date]="hilite"
     end
  
     if session[:title]=="hilite"
      @movies = @movies.all.order(:title)
-    elsif session[:release_date_class]=="hilite"
+    elsif session[:release_date]=="hilite"
      @movies = @movies.all.order(:release_date)
     end
     
@@ -45,7 +45,7 @@ class MoviesController < ApplicationController
     if session[:title]=="hilite" and params[:title_click]==nil 
       params[:title_click]="yes"
       redirect_to movies_path(params)
-    elsif session[:release_date_class]=="hilite" and params[:release_date_click]==nil
+    elsif session[:release_date]=="hilite" and params[:release_date_click]==nil
       params[:release_date_click]="yes"
       redirect_to movies_path(params)
     elsif params[:ratings]==nil and session[:checked]!=nil
