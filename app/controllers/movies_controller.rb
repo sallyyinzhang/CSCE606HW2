@@ -38,6 +38,8 @@ class MoviesController < ApplicationController
     
     if params[:ratings]!=nil
      session[:checked]=params[:ratings]
+    else
+      session[:checked]=nil
     end
     
     if session[:checked]==nil
