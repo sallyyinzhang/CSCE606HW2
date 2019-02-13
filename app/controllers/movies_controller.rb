@@ -50,6 +50,7 @@ class MoviesController < ApplicationController
     #returns an appropriate value for this collection.
     @movies = @movies.where({rating: session[:checked].keys})
     
+    #combine two
     if session[:title]=="hilite" and params[:choose_title]==nil 
       params[:choose_title]="yes"
       redirect_to movies_path(params)
