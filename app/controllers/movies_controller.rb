@@ -40,6 +40,7 @@ class MoviesController < ApplicationController
      session[:checked]=params[:ratings]
     end
     
+  #part 3
     if session[:checked]==nil
       session[:checked]=Hash.new()
       @all_ratings.each do |rating|
@@ -59,6 +60,7 @@ class MoviesController < ApplicationController
       redirect_to movies_path(params)
     elsif params[:ratings]==nil and session[:checked]!=nil
       params[:ratings]=session[:checked]
+      flash.keep
       redirect_to movies_path(params)
     end
     
