@@ -31,7 +31,9 @@ class MoviesController < ApplicationController
     elsif session[:release_date]=="hilite"
      @movies = @movies.all.order(:release_date)
     end
-    
+  
+  #part 2
+  #enumerable collection of all possible values of a movie rating
    @all_ratings = Movie.distinct.pluck(:rating)
     
     if params[:ratings]!=nil
@@ -41,17 +43,18 @@ class MoviesController < ApplicationController
     if session[:checked]==nil
       session[:checked]=Hash.new()
       @all_ratings.each do |rating|
-       session[:checked][rating]=1
+      session[:checked][rating]=1
       end
     end
     
+    #returns an appropriate value for this collection.
     @movies = @movies.where({rating: session[:checked].keys})
     
-    if session[:title_class]=="hilite" and params[:title_click]==nil 
-      params[:title_click]="yes"
+    if session[:title]=="hilite" and params[:choose_title]==nil 
+      params[:choose_title]="yes"
       redirect_to movies_path(params)
-    elsif session[:release_date_class]=="hilite" and params[:release_date_click]==nil
-      params[:release_date_click]="yes"
+    elsif session[:release_date]=="hilite" and params[:choose_release_date]==nil
+      params[:choose_release_date]="yes"
       redirect_to movies_path(params)
     elsif params[:ratings]==nil and session[:checked]!=nil
       params[:ratings]=session[:checked]
