@@ -38,10 +38,13 @@ class MoviesController < ApplicationController
     
     if params[:ratings]!=nil
      session[:checked]=params[:ratings]
+    else
+     session[:checked]=nil
+      
     end
     
     if session[:checked]==nil
-      session[:checked].new()
+      session[:checked]=Hash.new()
       @all_ratings.each do |rating|
       session[:checked][rating]=1
       end
