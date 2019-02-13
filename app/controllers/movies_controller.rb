@@ -59,8 +59,7 @@ class MoviesController < ApplicationController
       redirect_to movies_path(params)
     elsif params[:ratings]==nil and session[:checked]!=nil
       params[:ratings]=session[:checked]
-      flash.keep
-      #redirect_to movies_path(params)
+      redirect_to movies_path(params)
     end
     
   end
