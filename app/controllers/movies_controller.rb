@@ -38,9 +38,6 @@ class MoviesController < ApplicationController
     
     if params[:ratings]!=nil
      session[:checked]=params[:ratings]
-    else
-     session[:checked]=nil
-      
     end
     
     if session[:checked]==nil
@@ -63,7 +60,7 @@ class MoviesController < ApplicationController
     elsif params[:ratings]==nil and session[:checked]!=nil
       params[:ratings]=session[:checked]
       flash.keep
-      redirect_to movies_path(params)
+      #redirect_to movies_path(params)
     end
     
   end
