@@ -40,6 +40,16 @@ class MoviesController < ApplicationController
      session[:checked]=params[:ratings]
     end
     
+    
+    if params[:ratings]!=nil
+      @movies = Movie.where(rating: params[:ratings].keys)
+      session[:checked]=params[:ratings]
+    elsif params[:commit]=='Refresh'
+      @movie = Movie.all
+      params[:ratings] = Hash[@all_ratings.map{|rating| [rating, "1"]}]
+      session[:checked]=params[:ratings]
+    end
+      
   #part 3
     if session[:checked]==nil
       session[:checked]=Hash.new()
